@@ -40,7 +40,7 @@ app.post("/webhook", (req, res)=>{
             body.entry[0].changes[0].value.messages[0]
             ){
                 let phone_number_id = body.entry[0].changes[0].value.metadata.phone_number_id;
-                let from = body.entry[0].changes[0].value.messages.from;
+                let from = body.entry[0].changes[0].value.messages[0].from;
                 let message = body.entry[0].changes[0].value.messages[0].text.body;
 
                 let waurl = "https://graph.facebook.com/v16.0/" + phone_number_id + "/messages?access_token=" + accesstoken
@@ -62,8 +62,7 @@ app.post("/webhook", (req, res)=>{
                     headers: {
                         "Content-Type": "application/json"
                     }
-                  }).then(res => {
-                    console.log("axios response " + res.status);
+                  
                 });
                   res.status(200).send("OK");
         }
