@@ -37,11 +37,11 @@ app.post("/webhook", (req, res)=>{
             body.entry[0].changes[0] &&
             body.entry[0].changes[0].value &&
             body.entry[0].changes[0].value.metadata &&
-            body.entry[0].changes[0].messages
+            body.entry[0].changes[0].value.messages[0]
             ){
                 let phone_number_id = body.entry[0].changes[0].value.metadata.phone_number_id;
-                let from = body.entry[0].changes[0].messages.from;
-                let message = body.entry[0].changes[0].messages.text.body;
+                let from = body.entry[0].changes[0].value.messages.from;
+                let message = body.entry[0].changes[0].value.messages[0].text.body;
 
                 let waurl = "https://graph.facebook.com/v16.0/" + phone_number_id + "/messages?access_token=" + accesstoken
 
