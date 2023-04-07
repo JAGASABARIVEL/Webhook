@@ -34,14 +34,14 @@ app.post("/webhook", (req, res)=>{
 
     if (body.object){
         if (body.entry && 
-            body.entry.changes[0] &&
-            body.entry.changes[0].value &&
-            body.entry.changes[0].value.metadata &&
-            body.entry.changes[0].messages
+            body.entry[0].changes[0] &&
+            body.entry[0].changes[0].value &&
+            body.entry[0].changes[0].value.metadata &&
+            body.entry[0].changes[0].messages
             ){
-                let phone_number_id = body.entry.changes[0].value.metadata.phone_number_id;
-                let from = body.entry.changes[0].messages.from;
-                let message = body.entry.changes[0].messages.text.body;
+                let phone_number_id = body.entry[0].changes[0].value.metadata.phone_number_id;
+                let from = body.entry[0].changes[0].messages.from;
+                let message = body.entry[0].changes[0].messages.text.body;
 
                 axios({
                     method: 'post',
