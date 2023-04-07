@@ -63,8 +63,13 @@ app.post("/webhook", (req, res)=>{
                         "Content-Type": "application/json"
                     }
                   
+                }).then(res => {
+                    console.log(res.status);
                 });
-                  res.status(200).send("OK");
+                res.status(200).send("OK");
+        }
+        else{
+            res.status(403).send("Not a valid request");
         }
     }
     else{
