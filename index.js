@@ -44,8 +44,8 @@ app.post("/webhook", (req, res)=>{
                 let message = body.entry[0].changes[0].messages.text.body;
 
                 axios({
-                    method: 'post',
-                    url: 'https://graph.facebook.com/v16.0/' + phone_number_id + '/messages' + "?access_token=" + accesstoken,
+                    method: "POST",
+                    url: "https://graph.facebook.com/v16.0/" + phone_number_id + "/messages?access_token=" + accesstoken,
                     data: { 
                             messaging_product: "whatsapp", 
                             to: from, 
@@ -54,7 +54,9 @@ app.post("/webhook", (req, res)=>{
                                 body: "Hello from Jagasabarivel!"
                             }
                     },
-                    headers: 'Content-Type: application/json'
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
                   });
                   res.status(200).send("OK");
         }
