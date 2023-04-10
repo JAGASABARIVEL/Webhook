@@ -13,19 +13,26 @@ app.listen(process.env.PORT || 8001, ()=>{
     console.log("Webhook is listening in 8001");
 });
 
-app.get("/webhooks", (req, res)=>{
-    let mode = req.query["hub.mode"];
-    let challenge = req.query["hub.challenge"];
-    let token = req.query["hub.verify_token"];
-    console.log(mode + "\n" + challenge + "\n" + token);
-    if (mode && token){
-        if (mode === "subscribe" && token === mytoken){
-            res.status(200).send(challenge);
+// Add support for GET requests to our webhook
+app.get("/messaging-webhook", (req, res) => {
+  
+    // Parse the query params
+      let mode = req.query["hub.mode"];
+      let token = req.query["hub.verify_token"];
+      let challenge = req.query["hub.challenge"];
+    
+      // Check if a token and mode is in the query string of the request
+      if (mode && token) {
+        // Check the mode and token sent is correct
+        if (mode === "subscribe" && token === config.verifyToken) {
+          // Respond with the challenge token from the request
+          console.log("WEBHOOK_VERIFIED");
+          res.status(200).send(challenge);
+        } else {
+          // Respond with '403 Forbidden' if verify tokens do not match
+          res.sendStatus(403);
         }
-        else{
-            res.status(403);
-        }
-    }
+      }
 });
 
 app.get("/webhook", (req, res)=>{
@@ -121,7 +128,7 @@ app.post("/webhook", (req, res)=>{
 
 });
 
-app.post("/webhooks", (req, res)=>{
+app.post("/messaging-webhook", (req, res)=>{
     let body = req.body;
 
     console.log(JSON.stringify(body, null, 2));
