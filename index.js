@@ -33,11 +33,13 @@ app.post("/webhook", (req, res)=>{
 
     console.log(JSON.stringify(body, null, 2));
 
-    if (body.data){
-        let conversation_id = [];
-        for(let index=0; index < body.data.length; index++ ){
-            conversation_id.push(body.data[index].id);
-        }
+    if (body.entry){
+
+        let psid = body.entry[0].messaging[0].sender.id;
+        let pageid = body.entry[0].messaging[0].recipient.id;
+        let message = body.entry[0].messaging[0].message.text;
+        console.log(psid + "\n" + pageid + "\n" + message + "\n");
+        
         res.status(200).send(conversation_id);
     }
     
