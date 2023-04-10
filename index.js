@@ -8,8 +8,8 @@ const app = express().use(body_parser.json());
 const accesstoken = process.env.WHATSAPP_TOKEN;
 const mytoken = process.env.MY_TOKEN;
 
-app.listen(process.env.PORT || 8000, ()=>{
-    console.log("Webhook is listening in 8000");
+app.listen(process.env.PORT || 8001, ()=>{
+    console.log("Webhook is listening in 8001");
 });
 
 app.get("/webhook", (req, res)=>{
@@ -33,7 +33,21 @@ app.post("/webhook", (req, res)=>{
     console.log(JSON.stringify(body, null, 2));
 
     if (body.object){
-        if (body.entry && 
+
+        // Status Handle
+        if (body.entry[0].changes[0].value.statuses){
+            let status = body.entry[0].changes[0].value.statuses[0].status;
+            let customer_number = body.entry[0].changes[0].value.statuses[0].recipient_id;
+        }
+
+        // Message Delete Handle
+        else if (body.entry[0].changes[0].value.messages[0].errors){
+            let code = body.entry[0].changes[0].value.messages[0].errors[0].code;
+            let details = body.entry[0].changes[0].value.messages[0].errors[0].details;
+        }
+
+        // Message Receive
+        else if (body.entry && 
             body.entry[0].changes[0] &&
             body.entry[0].changes[0].value &&
             body.entry[0].changes[0].value.metadata &&
@@ -43,31 +57,43 @@ app.post("/webhook", (req, res)=>{
                 let from = body.entry[0].changes[0].value.messages[0].from;
                 let message = body.entry[0].changes[0].value.messages[0].text.body;
 
-                let waurl = "https://graph.facebook.com/v16.0/" + phone_number_id + "/messages?access_token=" + accesstoken
-
-                console.log("waurl " + waurl);
-                console.log("to " + from);
                 
+
+                //let waurl = "https://graph.facebook.com/v16.0/" + phone_number_id + "/messages?access_token=" + accesstoken
+                let waurl = "http://localhost:8080/api/v1/webhook/notify";
                 axios({
                     method: "POST",
                     url: waurl,
                     data: { 
-                            messaging_product: "whatsapp", 
-                            to: from, 
-                            type: "text", 
-                            text: {
-                                body: "Hello from Jagasabarivel!"
-                            }
+                        "from":from,
+                        "message":message,
+                        "to":15550167146
                     },
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                  
-                }).then(res => {
-                    console.log(res.status);
                 });
+                
+                // axios({
+                //     method: "POST",
+                //     url: waurl,
+                //     data: { 
+                //             messaging_product: "whatsapp", 
+                //             to: from, 
+                //             type: "text", 
+                //             text: {
+                //                 body: "Hello from Jagasabarivel!"
+                //             }
+                //     },
+                //     headers: {
+                //         "Content-Type": "application/json"
+                //     }
+                  
+                // }).then(res => {
+                //     console.log(res.status);
+                // });
                 res.status(200).send("OK");
         }
+
+
+
         else{
             res.status(403).send("Not a valid request");
         }
