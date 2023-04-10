@@ -8,6 +8,7 @@ const app = express().use(body_parser.json());
 const accesstoken = process.env.WHATSAPP_TOKEN;
 const mytoken = process.env.MY_TOKEN;
 const be_url = process.env.BE_URL;
+const messenger_token=process.env.MESSENGER_TOKEN;
 
 app.listen(process.env.PORT || 8001, ()=>{
     console.log("Webhook is listening in 8001");
@@ -33,6 +34,19 @@ app.post("/webhook", (req, res)=>{
 
     console.log(JSON.stringify(body, null, 2));
 
+    axios({
+        method: "POST",
+        url: "https://graph.facebook.com/v14.0/115449414847143/messages?&messaging_type=RESPONSE&access_token=EAADhLDc1el8BAK0xGLirGrjCKeqvcSBFPYMDOlj7s4D6UCpATgnpk4AKAHW6jCAyE761WVZC1CclOhxZBOCTPkaoJjvhpUlH3sbDGAT9OiiGFYk9jfeuVNvVRey7guxkGiFUAg25sfj9JuRMyarVQTbWNAzWdVoZA352WldsGEcnkInz4OUkNym3wG76EYZD",
+        data: {
+            "recipient": {
+                "id":6828243673860990 //psid
+            },
+            "message": {
+            "text":'You did it this time as well!'
+            }
+        },
+    });
+
     if (body.entry){
 
         let psid = body.entry[0].messaging[0].sender.id;
@@ -42,16 +56,15 @@ app.post("/webhook", (req, res)=>{
         
         axios({
             method: "POST",
-                    url: "https://graph.facebook.com/v14.0/115449414847143/messages?&messaging_type=RESPONSE&access_token=EAADhLDc1el8BANkmV6pdHBL1UBsU3XMwIedKOt9XpvgNRUq8cCJ6AUlKWhmeBaDr36F4vW9ctyjI8HUZBiNnHRIxHIpIb46QxApe0Ff5rr0CZA6zIXeZAAJT4Hwz5I4Oa7aNvJtyotKrcll8rHiGMRiKH6YR5lY1pxfcPUcFDo4RKOoo8TZA7oqP8wJsHNYZD",
-                    data: {
-                        "recipient": {
-                            "id":6828243673860990 //psid
-                        },
-                        "message": {
-                        "text":'You did it this time as well!'
-                        }
-                    },
-
+            url: "https://graph.facebook.com/v14.0/115449414847143/messages?&messaging_type=RESPONSE&access_token=" + messenger_token,
+            data: {
+                "recipient": {
+                    "id":6828243673860990 //psid
+                },
+                "message": {
+                "text":'You did it this time as well!'
+                }
+            },
         });
 
         res.status(200).send(conversation_id);
