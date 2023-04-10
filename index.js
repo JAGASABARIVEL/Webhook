@@ -42,19 +42,18 @@ app.post("/webhook", (req, res)=>{
         let pageid = body.entry[0].messaging[0].recipient.id;
         let message = body.entry[0].messaging[0].message.text;
         console.log(psid + "\n" + pageid + "\n" + message + "\n");
-        
-        axios({
-            method: "POST",
-            url: "https://graph.facebook.com/v14.0/115449414847143/messages?&messaging_type=RESPONSE&access_token=" + messenger_token,
-            data: {
-                "recipient": {
-                    "id":6828243673860990 //psid
-                },
-                "message": {
-                "text":'You did it this time as well!'
-                }
-            },
-        });
+
+        let waurl = be_url + "/api/v1/webhook/notify";
+                axios({
+                    method: "POST",
+                    url: waurl,
+                    data: { 
+                        "from":6828243673860990,  //psid
+                        "message":message,
+                        "to":115449414847143, //pageid
+                        "application":"page"
+                    },
+                });
 
         res.status(200).send("Success!");
     }
@@ -95,7 +94,8 @@ app.post("/webhook", (req, res)=>{
                     data: { 
                         "from":from,
                         "message":message,
-                        "to":15550167146
+                        "to":15550167146,
+                        "application":"whatsapp"
                     },
                 });
                 
