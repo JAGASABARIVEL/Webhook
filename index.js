@@ -60,7 +60,8 @@ app.post("/webhook", (req, res)=>{
                 
 
                 //let waurl = "https://graph.facebook.com/v16.0/" + phone_number_id + "/messages?access_token=" + accesstoken
-                let waurl = "http://localhost:8080/api/v1/webhook/notify";
+                //let waurl = "http://localhost:8080/api/v1/webhook/notify";
+                let waurl = "https://a167-106-197-119-250.ngrok-free.app/api/v1/webhook/notify";
                 axios({
                     method: "POST",
                     url: waurl,
