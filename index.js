@@ -36,7 +36,7 @@ app.post("/webhook", (req, res)=>{
 
     
 
-    if (body.entry){
+    if (body.object === "page"){
 
         let psid = body.entry[0].messaging[0].sender.id;
         let pageid = body.entry[0].messaging[0].recipient.id;
@@ -59,7 +59,7 @@ app.post("/webhook", (req, res)=>{
         res.status(200).send("Success!");
     }
     
-    else if (body.object){
+    else if (body.object === "whatsapp_business_account"){
 
         // Status Handle
         if (body.entry[0].changes[0].value.statuses){
