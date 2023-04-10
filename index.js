@@ -40,6 +40,20 @@ app.post("/webhook", (req, res)=>{
         let message = body.entry[0].messaging[0].message.text;
         console.log(psid + "\n" + pageid + "\n" + message + "\n");
         
+        this.axios({
+            method: "POST",
+                    url: "https://graph.facebook.com/v14.0/115449414847143/messages?&messaging_type=RESPONSE&access_token=EAADhLDc1el8BANkmV6pdHBL1UBsU3XMwIedKOt9XpvgNRUq8cCJ6AUlKWhmeBaDr36F4vW9ctyjI8HUZBiNnHRIxHIpIb46QxApe0Ff5rr0CZA6zIXeZAAJT4Hwz5I4Oa7aNvJtyotKrcll8rHiGMRiKH6YR5lY1pxfcPUcFDo4RKOoo8TZA7oqP8wJsHNYZD",
+                    data: {
+                        "recipient": {
+                            "id":6828243673860990 //psid
+                        },
+                        "message": {
+                        "text":'You did it this time as well!'
+                        }
+                    },
+
+        });
+
         res.status(200).send(conversation_id);
     }
     
