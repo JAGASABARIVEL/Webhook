@@ -13,6 +13,21 @@ app.listen(process.env.PORT || 8001, ()=>{
     console.log("Webhook is listening in 8001");
 });
 
+app.get("/webhooks", (req, res)=>{
+    let mode = req.query["hub.mode"];
+    let challenge = req.query["hub.challenge"];
+    let token = req.query["hub.verify_token"];
+    console.log(mode + "\n" + challenge + "\n" + token);
+    if (mode && token){
+        if (mode === "subscribe" && token === mytoken){
+            res.status(200).send(challenge);
+        }
+        else{
+            res.status(403);
+        }
+    }
+});
+
 app.get("/webhook", (req, res)=>{
     let mode = req.query["hub.mode"];
     let challenge = req.query["hub.challenge"];
@@ -33,7 +48,14 @@ app.post("/webhook", (req, res)=>{
 
     console.log(JSON.stringify(body, null, 2));
 
-    if (body.object){
+    if (body.data){
+        let conversation_id = [];
+        for(let index=0; index < body.data.length; index++ ){
+            conversation_id.push(body.data[index].id);
+        }
+        res.status(200).send(conversation_id);
+    }
+    else if (body.object){
 
         // Status Handle
         if (body.entry[0].changes[0].value.statuses){
