@@ -48,14 +48,7 @@ app.post("/webhook", (req, res)=>{
 
     console.log(JSON.stringify(body, null, 2));
 
-    if (body.data){
-        let conversation_id = [];
-        for(let index=0; index < body.data.length; index++ ){
-            conversation_id.push(body.data[index].id);
-        }
-        res.status(200).send(conversation_id);
-    }
-    else if (body.object){
+    if (body.object){
 
         // Status Handle
         if (body.entry[0].changes[0].value.statuses){
@@ -122,6 +115,25 @@ app.post("/webhook", (req, res)=>{
             res.status(403).send("Not a valid request");
         }
     }
+    else{
+        res.status(403).send("Not a valid request");
+    }
+
+});
+
+app.post("/webhooks", (req, res)=>{
+    let body = req.body;
+
+    console.log(JSON.stringify(body, null, 2));
+
+    if (body.data){
+        let conversation_id = [];
+        for(let index=0; index < body.data.length; index++ ){
+            conversation_id.push(body.data[index].id);
+        }
+        res.status(200).send(conversation_id);
+    }
+    
     else{
         res.status(403).send("Not a valid request");
     }
