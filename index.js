@@ -34,18 +34,7 @@ app.post("/webhook", (req, res)=>{
 
     console.log(JSON.stringify(body, null, 2));
 
-    axios({
-        method: "POST",
-        url: "https://graph.facebook.com/v14.0/115449414847143/messages?&messaging_type=RESPONSE&access_token=EAADhLDc1el8BAK0xGLirGrjCKeqvcSBFPYMDOlj7s4D6UCpATgnpk4AKAHW6jCAyE761WVZC1CclOhxZBOCTPkaoJjvhpUlH3sbDGAT9OiiGFYk9jfeuVNvVRey7guxkGiFUAg25sfj9JuRMyarVQTbWNAzWdVoZA352WldsGEcnkInz4OUkNym3wG76EYZD",
-        data: {
-            "recipient": {
-                "id":6828243673860990 //psid
-            },
-            "message": {
-            "text":'You did it this time as well!'
-            }
-        },
-    });
+    
 
     if (body.entry){
 
@@ -67,7 +56,7 @@ app.post("/webhook", (req, res)=>{
             },
         });
 
-        res.status(200).send(conversation_id);
+        res.status(200).send("Success!");
     }
     
     else if (body.object){
